@@ -83,12 +83,14 @@ func LoadActiveConfiguration(arknetwork ArkNetworkType) string {
 		switch arknetwork {
 		case MAINNET:
 			log.Println("Active network is ARK MAINNET")
-			selectedPeer = seedList[r1.Intn(len(seedList))]
+			// selectedPeer = seedList[r1.Intn(len(seedList))]
+			selectedPeer = "167.114.29.55:4002"
 			log.Println("Random peer selected: ", selectedPeer)
 
 		case DEVNET:
 			log.Println("Active network is ARK DEVNET")
-			selectedPeer = testSeedList[r1.Intn(len(testSeedList))]
+			// selectedPeer = testSeedList[r1.Intn(len(testSeedList))]
+			selectedPeer = "167.114.29.55:4002"
 			log.Println("Random peer selected: ", selectedPeer)
 		case KAPU:
 			log.Println("Active network is KAPU MAINNET")

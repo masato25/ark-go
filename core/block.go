@@ -35,6 +35,41 @@ func (s *ArkClient) GetPeerHeight() (model.BlockHeightResponse, ArkApiResponseEr
 	return *respData, *respError, resp
 }
 
+type BlocksResponse struct {
+	Success bool          `json:"success"`
+	Blocks  []model.Block `json:"blocks"`
+	Count   int           `json:"count,omitempty"`
+}
+
+func (s *ArkClient) GetBlocksByGeneratorPublicKey(publicKey string, limit ...int) (BlocksResponse, ArkApiResponseError, *http.Response) {
+	respData := new(BlocksResponse)
+	respError := new(ArkApiResponseError)
+	qLimit := 10
+	if len(limit) != 0 {
+		qLimit = limit[0]
+	}
+
+	resp, err := s.sling.New().Get("api/blocks?limit="+strconv.Itoa(qLimit)+"&generatorPublicKey="+publicKey).Receive(respData, respError)
+	if err != nil {
+		respError.ErrorMessage = err.Error()
+		respError.ErrorObj = err
+	}
+
+	return *respData, *respError, resp
+}
+
+func (s *ArkClient) GetBlocksByHeight(height int) (BlocksResponse, ArkApiResponseError, *http.Response) {
+	respData := new(BlocksResponse)
+	respError := new(ArkApiResponseError)
+	resp, err := s.sling.New().Get("api/blocks?height="+strconv.Itoa(height)).Receive(respData, respError)
+	if err != nil {
+		respError.ErrorMessage = err.Error()
+		respError.ErrorObj = err
+	}
+
+	return *respData, *respError, resp
+}
+
 //PostBlock to selected ARKNetwork
 func (s *ArkClient) PostBlock(payload model.BlockReceiveStruct) (model.PostBlockResponse, ArkApiResponseError, *http.Response) {
 	respTr := new(model.PostBlockResponse)
